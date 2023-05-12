@@ -1,19 +1,17 @@
 version: 4.1.2
 orbs:
-cypress: cypress: cypress-io/cypress@3.1.1
-node: cicleci/node@5.0.2
-
+  cypress: cypress-io/cypress@3.1.1
+  node: cicleci/node@5.0.2
 excecutors: 
-with-browsers:
-resourse_class: small
-docker: 
-- image: "cypress/browsers"
-
-- cypress/run:
-name : Chrome E2E test
-yarn: true
-requires: 
-- build-and-test
-start: yarn start
-executor: with-browser
-browser: chrome
+  with-browsers:  
+    resourse_class: small
+    docker: 
+    - image: "cypress/browsers"
+    - cypress/run:
+      name : Chrome E2E test
+      yarn: true
+      requires: 
+        - build-and-test
+      start: yarn start
+      executor: with-browser
+      browser: chrome
