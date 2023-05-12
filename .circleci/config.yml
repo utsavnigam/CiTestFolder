@@ -1,17 +1,12 @@
-version: 4.1.2
+version: 2.1
 orbs:
-  cypress: cypress-io/cypress@3.1.1
-  node: cicleci/node@5.0.2
-excecutors: 
-  with-browsers:  
-    resourse_class: small
-    docker: 
-    - image: "cypress/browsers"
-    - cypress/run:
-      name : Chrome E2E test
-      yarn: true
-      requires: 
-        - build-and-test
-      start: yarn start
-      executor: with-browser
-      browser: chrome
+  # "cypress-io/cypress@3" installs the latest published
+  # version "s.x.y" of the orb. We recommend you then use
+  # the strict explicit version "cypress-io/cypress@3.x.y"
+  # to lock the version and prevent unexpected CI changes
+  cypress: cypress-io/cypress@3
+workflows:
+  build:
+    jobs:
+      - cypress/run # "run" job comes from "cypress" orb
+          start-command: 'npm run start'
