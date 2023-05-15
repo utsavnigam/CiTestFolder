@@ -5,8 +5,38 @@ orbs:
   # the strict explicit version "cypress-io/cypress@3.x.y"
   # to lock the version and prevent unexpected CI changes
   cypress: cypress-io/cypress@3
+  slack: circleci/slack@4.9.3
+jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+        auth:
+          username: nigamutsav22
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 workflows:
   test:
     jobs:
       - cypress/run:
           start-command: 'npm run start'
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
