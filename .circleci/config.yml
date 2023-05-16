@@ -46,8 +46,3 @@ workflows:
     jobs:
       - notify:
           context: slack-secrets
-          jobs:
-      - build:
-          filters:
-            branches:
-              ignore: /random/
