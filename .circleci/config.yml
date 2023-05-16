@@ -42,7 +42,13 @@ workflows:
     jobs:
       - cypress/run:
           start-command: 'npm run start'
+          filters:
+            branches:
+              ignore: 'random'
   send-notification:
     jobs:
       - notify:
           context: slack-secrets
+          filters:
+            branches:
+              ignore: 'random'
