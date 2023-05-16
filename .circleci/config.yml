@@ -38,12 +38,6 @@ jobs:
             }
           event: always
 workflows:
-  build-workflow:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore: /random/
   test:
     jobs:
       - cypress/run:
@@ -52,3 +46,8 @@ workflows:
     jobs:
       - notify:
           context: slack-secrets
+          jobs:
+      - build:
+          filters:
+            branches:
+              ignore: /random/
