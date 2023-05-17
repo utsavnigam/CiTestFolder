@@ -39,7 +39,7 @@ jobs:
             }
           event: always
 workflows:
- send-notification:
+  send-notification:
     jobs:
       - notify:
           context: slack-secrets
