@@ -7,12 +7,21 @@ orbs:
   cypress: cypress-io/cypress@3
   slack: circleci/slack@4.9.3
 jobs:
+  test:
+    jobs:
+      - cypress/run:
+          start-command: npm run start
+          filters:
+            branches:
+              only:
+                - main
+                - master
   notify:
     docker:
-      - image: 'cimg/base:stable'
+      - image: cimg/base:stable
         auth:
           username: nigamutsav22
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+          password: $DOCKERHUB_PASSWORD
     steps:
       - slack/notify:
           event: fail
@@ -20,17 +29,6 @@ jobs:
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
-workflows:
-  test:
-    jobs:
-      - cypress/run:
-          start-command: 'npm run start'
-          filters:
-            branches:
-              only: 
-                - main
-                - master
-          
       - slack/notify:
           custom: |
             {
@@ -48,13 +46,13 @@ workflows:
               ]
             }
           event: always
+workflows:
   send-notification:
     jobs:
       - notify:
           context: slack-secrets
           filters:
             branches:
-               only: 
+              only:
                 - main
                 - master
-              
