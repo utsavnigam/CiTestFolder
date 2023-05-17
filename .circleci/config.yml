@@ -4,7 +4,7 @@ orbs:
   # version "s.x.y" of the orb. We recommend you then use
   # the strict explicit version "cypress-io/cypress@3.x.y"
   # to lock the version and prevent unexpected CI changes
-  cypress: cypress-io/cypress@3
+  //cypress: cypress-io/cypress@3
   slack: circleci/slack@4.9.3
 jobs:
   notify:
@@ -39,6 +39,15 @@ jobs:
             }
           event: always
 workflows:
+ send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
+          filters:
+            branches:
+               only: 
+                - main
+                - master
   test:
     jobs:
       - cypress/run:
