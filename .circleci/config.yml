@@ -47,16 +47,7 @@ workflows:
             branches:
               only: 
                 - main
-                - master 
-      - message:
-         flow:
-           steps:
-             - run: echo "Hello, world!" > workspace/echo-output
-           filters:
-            branches:
-               only: 
-                - main
-                - master             
+                - master            
       - notify:
           requires:
             - cypress/run
@@ -66,4 +57,12 @@ workflows:
                only: 
                 - main
                 - master    
-                  
+      - message:
+         flow:
+           steps:
+             - run: echo "Hello, world!" > workspace/echo-output
+           filters:
+            branches:
+               only: 
+                - main
+                - master            
