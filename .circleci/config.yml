@@ -41,6 +41,7 @@ jobs:
 workflows:
   send-notification:
     jobs:
+      requires: 'cypress/run'
       - notify:
           context: slack-secrets
           filters:
