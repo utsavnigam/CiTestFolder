@@ -48,13 +48,5 @@ workflows:
               only: 
                 - main
                 - master
-  send-notification:
-    jobs:
-      - notify:
-          context: slack-secrets
-          filters:
-            branches:
-               only: 
-                - main
-                - master
+  
               
