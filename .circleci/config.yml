@@ -59,7 +59,6 @@ workflows:
                 - master            
 runCommand:
  jobs:
-  flow:
     executor: my-executor
     steps:
       - run: echo "Hello, world!" > workspace/echo-output
