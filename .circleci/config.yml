@@ -41,20 +41,20 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      requires: 'cypress/run'
-      - notify:
-          context: slack-secrets
-          filters:
-            branches:
-               only: 
-                - main
-                - master            
-  test:
-    jobs:
       - cypress/run:
           start-command: 'npm run start'
           filters:
             branches:
               only: 
                 - main
-                - master              
+                - master 
+      - notify:
+          requires:
+            - cypress/run
+          context: slack-secrets
+          filters:
+            branches:
+               only: 
+                - main
+                - master            
+                   
