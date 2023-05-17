@@ -20,6 +20,16 @@ jobs:
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
+workflows:
+  test:
+    jobs:
+      - cypress/run:
+          start-command: 'npm run start'
+          filters:
+            branches:
+              only: 
+                - main
+                - master
           
       - slack/notify:
           custom: |
@@ -38,31 +48,13 @@ jobs:
               ]
             }
           event: always
-workflows:
-  build-and-notify:
+  send-notification:
     jobs:
-      - cypress/run:
-          yarn: true
-          cache-key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
-          post-steps:
-            - store_test_results:
-                path: cypress/results
-      - build-test-and-notify
-test:
-  jobs:
-    - cypress/run:
-        start-command: npm run start
-        filters:
-          branches:
-            only:
-              - main
-              - master
-send-notification:
-  jobs:
-    - notify:
-        context: slack-secrets
-        filters:
-          branches:
-            only:
-              - main
-              - master
+      - notify:
+          context: slack-secrets
+          filters:
+            branches:
+               only: 
+                - main
+                - master
+              
