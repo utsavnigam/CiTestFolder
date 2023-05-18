@@ -42,7 +42,30 @@ workflows:
   send-notification:
     jobs:
       - cypress/run:
-          start-command: 'npm run start'
+          steps:
+            - run: mkdir -p workspace
+            - run: echo "Hello, Utsav!" > workspace/echo-output
+            - persist_to_workspace:
+              root: workspace
+              paths:
+                - echo-output
+          filters:
+            branches:
+              only: 
+                - main
+                - master 
+      - downstream:
+          steps:
+            - attach_workspace:
+                # Must be absolute path or relative path from working_directory
+                at: /tmp/workspace
+
+            - run: |
+                if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
+                  echo "It worked!";
+                else
+                  echo "Nope!"; exit 1
+                fi
           filters:
             branches:
               only: 
