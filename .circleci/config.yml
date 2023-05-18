@@ -57,4 +57,7 @@ workflows:
                only: 
                 - main
                 - master    
-                        
+      -flow:
+         steps:   
+           - run: echo "Hello, world!" > workspace/echo-output
+                          
