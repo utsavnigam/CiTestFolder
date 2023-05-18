@@ -41,48 +41,44 @@ jobs:
               ]
             }
           event: always
+  flow:
+    executor: my-executor
+    steps:
+      - run: mkdir -p workspace
+      - run: echo "Hello, Utsav!" > workspace/echo-output
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - echo-output
+  downstream:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+                # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
+
+      - run: |
+          if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
+              echo "It worked!";
+          else
+              echo "Nope!"; exit 1
+          fi
 workflows:
   send-notification:
     jobs:
       - flow:
-          executor: my-executor
-          steps:
-            - run: mkdir -p workspace
-            - run: echo "Hello, Utsav!" > workspace/echo-output
-            - persist_to_workspace:
-              root: workspace
-              paths:
-                - echo-output
           filters:
             branches:
               only: 
                 - main
                 - master 
       - downstream:
-          executor: my-executor
-          steps:
-            - attach_workspace:
-                # Must be absolute path or relative path from working_directory
-                at: /tmp/workspace
-
-            - run: |
-                if [[ `cat /tmp/workspace/echo-output` == "Hello, world!" ]]; then
-                  echo "It worked!";
-                else
-                  echo "Nope!"; exit 1
-                fi
           filters:
             branches:
               only: 
                 - main
-                - master 
-      - notify:
+                - master
           requires:
-            - cypress/run
-          context: slack-secrets
-          filters:
-            branches:
-               only: 
-                - main
-                - master    
+            - flow
+ 
                         
