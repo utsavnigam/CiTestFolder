@@ -1,18 +1,14 @@
 version: 2.1
 orbs:
-  # "cypress-io/cypress@3" installs the latest published
-  # version "s.x.y" of the orb. We recommend you then use
-  # the strict explicit version "cypress-io/cypress@3.x.y"
-  # to lock the version and prevent unexpected CI changes
   cypress: cypress-io/cypress@3
   slack: circleci/slack@4.9.3
 jobs:
   notify:
     docker:
-      - image: 'cimg/base:stable'
+      - image: cimg/base:stable
         auth:
           username: nigamutsav22
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+          password: $DOCKERHUB_PASSWORD
     steps:
       - slack/notify:
           event: fail
@@ -20,7 +16,6 @@ jobs:
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
-          
       - slack/notify:
           custom: |
             {
@@ -42,22 +37,21 @@ workflows:
   send-notification:
     jobs:
       - cypress/run:
-          start-command: 'npm run start'
+          start-command: npm run start
           filters:
             branches:
-              only: 
+              only:
                 - main
-                - master 
+                - master
       - notify:
           requires:
             - cypress/run
           context: slack-secrets
           filters:
             branches:
-               only: 
+              only:
                 - main
-                - master    
-      -flow:
-         steps:   
-           - run: echo "Hello, world!" > workspace/echo-output
-                          
+                - master
+        -flow:
+          steps:
+            - run: echo "Hello, world!" > workspace/echo-output
