@@ -41,7 +41,7 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      - cypress/run:
+      - flow:
           steps:
             - run: mkdir -p workspace
             - run: echo "Hello, Utsav!" > workspace/echo-output
