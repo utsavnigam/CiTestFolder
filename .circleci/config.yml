@@ -6,21 +6,24 @@ orbs:
   # to lock the version and prevent unexpected CI changes
   cypress: cypress-io/cypress@3
   slack: circleci/slack@4.9.3
-jobs:
-  notify:
+executors:
+  my-executor:
     docker:
-      - image: 'cimg/base:stable'
+      - image: buildpack-deps:jessie
         auth:
           username: nigamutsav22
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    working_directory: /tmp
+jobs:
+  notify:
+    executor: my-executor
     steps:
       - slack/notify:
           event: fail
           template: basic_fail_1
       - slack/notify:
           event: pass
-          template: success_tagged_deploy_1
-          
+          template: success_tagged_deploy_1   
       - slack/notify:
           custom: |
             {
@@ -42,6 +45,7 @@ workflows:
   send-notification:
     jobs:
       - flow:
+          executor: my-executor
           steps:
             - run: mkdir -p workspace
             - run: echo "Hello, Utsav!" > workspace/echo-output
@@ -55,6 +59,7 @@ workflows:
                 - main
                 - master 
       - downstream:
+          executor: my-executor
           steps:
             - attach_workspace:
                 # Must be absolute path or relative path from working_directory
