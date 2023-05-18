@@ -20,27 +20,27 @@ jobs:
     steps:
       - slack/notify:
           event: fail
-          template: basic_fail_1
+          template: MY_ORB_TEMPLATE
       - slack/notify:
           event: pass
-          template: success_tagged_deploy_1   
-      - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+          template: MY_ORB_TEMPLATE  
+      # - slack/notify:
+      #     custom: |
+      #       {
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "fields": [
+      #               {
+      #                 "type": "plain_text",
+      #                 "text": "*This is a text notification*",
+      #                 "emoji": true
+      #               }
+      #             ]
+      #           }
+      #         ]
+      #       }
+      #     event: always
   flow:
     executor: my-executor
     steps:
@@ -58,11 +58,7 @@ jobs:
           at: /tmp/workspace
 
       - run: |
-          if [[ `cat /tmp/workspace/echo-output` == "Hello, Utsav!" ]]; then
-              echo "It worked!";
-          else
-              echo "Nope!"; exit 1
-          fi
+          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
 workflows:
   send-notification:
     jobs:
@@ -80,5 +76,14 @@ workflows:
                 - master
           requires:
             - flow
+      - notify:
+          requires:
+            - downstream
+          context: slack-secrets
+          filters:
+            branches:
+               only: 
+                - main
+                - master   
  
                         
