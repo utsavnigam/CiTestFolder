@@ -9,7 +9,7 @@ orbs:
 executors:
   my-executor:
     docker:
-      - image: buildpack-deps:jessie
+      - image: cimg/base
         auth:
           username: nigamutsav22
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
