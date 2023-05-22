@@ -18,12 +18,12 @@ jobs:
   notify:
     executor: my-executor
     steps:
-      - slack/notify:
-          event: fail
-          template: MY_ORB_TEMPLATE
+      # - slack/notify:
+      #     event: fail
+      #     template: MY_ORB_TEMPLATE
       - slack/notify:
           event: pass
-          template: |
+          custom: |
             {
               "text": "CircleCI job succeeded!",              
               "blocks": [
@@ -40,7 +40,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "abc"
+                      "text": "*Env*: << parameters.env >>"
                     },
                     {
                       "type": "mrkdwn",
