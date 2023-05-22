@@ -23,24 +23,59 @@ jobs:
           template: MY_ORB_TEMPLATE
       - slack/notify:
           event: pass
-          template: MY_ORB_TEMPLATE   
-      # - slack/notify:
-      #     custom: |
-      #       {
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "fields": [
-      #               {
-      #                 "type": "plain_text",
-      #                 "text": "*This is a text notification*",
-      #                 "emoji": true
-      #               }
-      #             ]
-      #           }
-      #         ]
-      #       }
-      #     event: always
+          template: |
+            {
+              "text": "CircleCI job succeeded!",              
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Job Successful. :tada:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "abc"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Job*: ${CIRCLE_JOB}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*: $CIRCLE_BRANCH"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
   flow:
     executor: my-executor
     steps:
