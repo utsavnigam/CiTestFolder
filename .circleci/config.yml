@@ -9,7 +9,7 @@ orbs:
 executors:
   my-executor:
     docker:
-      - image: cimg/base
+      - image: cimg/base:2021.04
         auth:
           username: nigamutsav22
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
