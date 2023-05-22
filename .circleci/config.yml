@@ -9,7 +9,7 @@ orbs:
 executors:
   my-executor:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/node:20.2.0
         auth:
           username: nigamutsav22
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
@@ -17,6 +17,7 @@ executors:
 jobs:
   notify:
     executor: my-executor
+    steps:
     steps:
       - attach_workspace:
                 # Must be absolute path or relative path from working_directory
@@ -83,7 +84,7 @@ jobs:
     executor: my-executor
     steps:
       - run: mkdir -p workspace
-      - run: echo "Hello, Utsav!" > workspace/echo-output
+      - run: npx cypress run > workspace/echo-output
       - persist_to_workspace:
           root: workspace
           paths:
@@ -116,7 +117,7 @@ workflows:
             - flow
       - notify:
           requires:
-            - flow
+            - downstream
           context: slack-secrets
           filters:
             branches:
