@@ -9,7 +9,7 @@ orbs:
 executors:
   my-executor:
     docker:
-      - image: cimg/node:20.2.0
+      - image: cypress/base:latest
         auth:
           username: nigamutsav22
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
