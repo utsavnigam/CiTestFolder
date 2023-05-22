@@ -40,7 +40,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "abc"
+                      "text": "${MY_ORB_TEMPLATE}"
                     },
                     {
                       "type": "mrkdwn",
