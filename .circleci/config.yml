@@ -83,7 +83,8 @@ jobs:
     executor: my-executor
     steps:
       - run: mkdir -p workspace
-      - run: npx cypress run > workspace/echo-output
+      - run: npm install
+      - run: npm cypress run > workspace/echo-output
       - persist_to_workspace:
           root: workspace
           paths:
