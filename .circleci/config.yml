@@ -18,9 +18,13 @@ jobs:
   notify:
     executor: my-executor
     steps:
-      # - slack/notify:
-      #     event: fail
-      #     template: MY_ORB_TEMPLATE
+    steps:
+      - attach_workspace:
+                # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
+
+      - run: |
+          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
       - slack/notify:
           event: pass
           custom: |
@@ -113,7 +117,7 @@ workflows:
             - flow
       - notify:
           requires:
-            - downstream
+            - flow
           context: slack-secrets
           filters:
             branches:
