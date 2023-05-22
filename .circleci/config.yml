@@ -41,44 +41,49 @@ jobs:
       #         ]
       #       }
       #     event: always
+  flow:
+    executor: my-executor
+    steps:
+      - run: mkdir -p workspace
+      - run: echo "Hello, Utsav!" > workspace/echo-output
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - echo-output
+  downstream:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+                # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
+
+      - run: |
+          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
 workflows:
   send-notification:
     jobs:
       - flow:
-          executor: my-executor
-          steps:
-            - run: mkdir -p workspace
-            - run: echo "Hello, Utsav!" > workspace/echo-output
-            - persist_to_workspace:
-              root: workspace
-              paths:
-                - echo-output
           filters:
             branches:
               only: 
                 - main
                 - master 
       - downstream:
-          executor: my-executor
-          steps:
-            - attach_workspace:
-                # Must be absolute path or relative path from working_directory
-                at: /tmp/workspace
-
-            - run: |
-                echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
           filters:
             branches:
               only: 
                 - main
-                - master 
+                - master
+          requires:
+            - flow
       - notify:
           requires:
-            - cypress/run
+            - downstream
           context: slack-secrets
           filters:
             branches:
                only: 
                 - main
-                - master    
+                - master   
+ 
                         
