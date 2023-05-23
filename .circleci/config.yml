@@ -23,8 +23,6 @@ jobs:
           at: /tmp/workspace
       - run: |
           apt-get -y update; apt-get -y install curl
-      - run: |
-          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
       - slack/notify:
           event: pass
           custom: |
@@ -85,6 +83,8 @@ jobs:
     steps:
       - run: mkdir -p workspace
       - cypress-command: npx cypress run > workspace/echo-output
+      - run: |
+          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
       - persist_to_workspace:
           root: workspace
           paths:
