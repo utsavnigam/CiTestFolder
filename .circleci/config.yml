@@ -99,7 +99,7 @@ workflows:
                 - master 
       - notify:
           requires:
-            - downstream
+            - cypress/run
           context: slack-secrets
           filters:
             branches:
