@@ -23,7 +23,7 @@ jobs:
           at: /tmp/workspace
 
       - run: |
-          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
+          echo 'export MY_ORB_TEMPLATE=$(echo "wtf")' >> $BASH_ENV
       - slack/notify:
           event: pass
           custom: |
@@ -84,21 +84,10 @@ jobs:
     steps:
       - run: mkdir -p workspace
       - cypress-command: npx cypress run > workspace/echo-output
-      - run: |
-          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
       - persist_to_workspace:
           root: workspace
           paths:
             - echo-output
-  downstream:
-    executor: my-executor
-    steps:
-      - attach_workspace:
-                # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
-
-      - run: |
-          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
 workflows:
   send-notification:
     jobs:
@@ -108,14 +97,6 @@ workflows:
               only: 
                 - main
                 - master 
-      - downstream:
-          filters:
-            branches:
-              only: 
-                - main
-                - master
-          requires:
-            - cypress/run
       - notify:
           requires:
             - downstream
