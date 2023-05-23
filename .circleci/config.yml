@@ -79,12 +79,11 @@ jobs:
                 }
               ]
             }
-  flow:
+  cypress/run:
     executor: my-executor
     steps:
       - run: mkdir -p workspace
-      - run: npm install
-      - run: npm cypress run > workspace/echo-output
+      - cypress-command: npx cypress run > workspace/echo-output
       - persist_to_workspace:
           root: workspace
           paths:
@@ -101,7 +100,7 @@ jobs:
 workflows:
   send-notification:
     jobs:
-      - flow:
+      - cypress/run:
           filters:
             branches:
               only: 
@@ -114,7 +113,7 @@ workflows:
                 - main
                 - master
           requires:
-            - flow
+            - cypress/run
       - notify:
           requires:
             - downstream
