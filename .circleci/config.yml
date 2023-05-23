@@ -24,7 +24,7 @@ jobs:
       - run: |
           apt-get -y update; apt-get -y install curl
       - run: |
-          echo 'export MY_ORB_TEMPLATE=$(echo "wtf")' >> $BASH_ENV
+          echo 'export MY_ORB_TEMPLATE=$(cat /tmp/workspace/echo-output)' >> $BASH_ENV
       - slack/notify:
           event: pass
           custom: |
