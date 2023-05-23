@@ -21,7 +21,8 @@ jobs:
       - attach_workspace:
                 # Must be absolute path or relative path from working_directory
           at: /tmp/workspace
-
+      - run: |
+          aapt-get -y update; apt-get -y install curl
       - run: |
           echo 'export MY_ORB_TEMPLATE=$(echo "wtf")' >> $BASH_ENV
       - slack/notify:
